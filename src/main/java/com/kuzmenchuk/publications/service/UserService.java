@@ -13,10 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,11 +30,22 @@ public class UserService implements UserDetailsService {
 
         if (user == null) throw new UsernameNotFoundException("User " + username + " not found!");
 
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        List<GrantedAuthority> grantedAuthorities = buildUserAuthority(user.getRole());
 
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+    }
+
+    private List<GrantedAuthority> buildUserAuthority(Set<Role> userRoles) {
+
+        Set<GrantedAuthority> setAuths = new HashSet<>();
+
+        // Build user's authorities
+        for (Role userRole : userRoles) {
+            setAuths.add(new SimpleGrantedAuthority(String.valueOf(userRole)));
+        }
+
+        return new ArrayList<>(setAuths);
     }
 
     public boolean save(User user) {
@@ -58,8 +66,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    // TODO: Commit inserting
-
-
-
+    public User showUser(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

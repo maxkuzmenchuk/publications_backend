@@ -26,31 +26,33 @@ ALTER TABLE publications.user_user_id_seq
 
 create table publications.user_account
 (
-	id serial not null
-		constraint user_account_pk
-			primary key,
-	username varchar(16) not null,
-	password varchar(255) not null
+    id       serial       not null
+        constraint user_account_pk
+            primary key,
+    username varchar(16)  not null,
+    password varchar(255) not null
 );
 
-alter table publications.user_account owner to mkuzmenchuk;
+alter table publications.user_account
+    owner to mkuzmenchuk;
 
 create unique index user_account_id_uindex
-	on publications.user_account (id);
+    on publications.user_account (id);
 
 create table publications.user_role
 (
-	id serial not null
-		constraint user_role_pk
-			primary key,
-	user_id integer not null
-		constraint user_role_user_account_id_fk
-			references publications.user_account,
-	role varchar
+    id      serial  not null
+        constraint user_role_pk
+            primary key,
+    user_id integer not null
+        constraint user_role_user_account_id_fk
+            references publications.user_account,
+    role    varchar
 );
 
-alter table publications.user_role owner to mkuzmenchuk;
+alter table publications.user_role
+    owner to mkuzmenchuk;
 
 create unique index user_role_id_uindex
-	on publications.user_role (id);
+    on publications.user_role (id);
 
