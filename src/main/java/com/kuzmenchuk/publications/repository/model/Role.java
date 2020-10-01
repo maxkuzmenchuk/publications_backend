@@ -1,4 +1,4 @@
-package com.kuzmenchuk.publications.model;
+package com.kuzmenchuk.publications.repository;
 
 public enum Role {
     ROLE_ADMIN, ROLE_USER;
