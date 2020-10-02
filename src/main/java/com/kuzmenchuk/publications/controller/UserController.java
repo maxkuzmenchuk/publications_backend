@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-public class RegistrationController {
+public class UserController {
     @Autowired
     private UserService userService;
 
@@ -22,6 +22,15 @@ public class RegistrationController {
 
         return model;
     }
+
+//    @GetMapping("/login")
+//    public ModelAndView loginModel() {
+//        ModelAndView model = new ModelAndView();
+//
+//        model.setViewName("login");
+//
+//        return model;
+//    }
 
     @PostMapping("/registration")
     public String registration(@RequestParam("username") String username, @RequestParam("password") String password) {
