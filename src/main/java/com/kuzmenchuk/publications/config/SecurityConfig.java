@@ -17,6 +17,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
@@ -26,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new DaoAuthenticationProvider();
         daoAuthenticationProvider
                 .setUserDetailsService(userService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
         auth.authenticationProvider(daoAuthenticationProvider);
     }
@@ -47,19 +50,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/login", "/registration").permitAll()
+                .antMatchers("/", "/index", "/registration").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/login").permitAll()
                 .usernameParameter("username")
                 .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error=true")
                 .and()
                 .logout()
+                .logoutUrl("/logout")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/index?logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()

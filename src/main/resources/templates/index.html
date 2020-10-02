@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Home - Publications</title>
 </head>
 <body>
 Home Page
+
+<div th:if="${param.logout}" class="alert alert-success">
+    You have been logged out.
+</div>
+
+<form th:action="@{/logout}" method="post">
+<div>
+    <button type="submit">Log Out </button>
+</div>
+</form>
 </body>
 </html>

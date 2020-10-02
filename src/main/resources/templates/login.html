@@ -1,27 +1,28 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
-
+    <title>Login - Publications</title>
 </head>
 <body>
-<h1>Login Form</h1>
-
-<form name='login' th:action="@{/login}" method='POST'>
-    <table>
-        <tr>
-            <td>UserName:</td>
-            <td><input type='text' name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
-    <div>
-        <span> New user? <a th:href ="@{/registration}">Register here</a></span>
-    </div>
-</form>
+<div th:fragment="content">
+    <form name="f" th:action="@{/login}" method="post">
+        <fieldset>
+            <legend>Please Login</legend>
+            <div th:if="${param.error}" class="alert alert-error">
+                Invalid username and password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out.
+            </div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username"/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"/>
+            <div class="form-actions">
+                <button type="submit" class="btn">Log in</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>
+
