@@ -66,7 +66,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User showUser(String username) {
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public boolean update(User user) {
+        userRepository.saveAndFlush(user);
+        return true;
     }
 }

@@ -23,6 +23,6 @@ public class AdminController {
 
     @GetMapping("/show-user")
     public User showUser(@RequestParam("username") String username) {
-        return userService.showUser(username);
+        return userService.findUserByUsername(username);
     }
 }
