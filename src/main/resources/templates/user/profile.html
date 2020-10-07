@@ -11,7 +11,7 @@
 <p th:text="${user?.password}"></p>
 <p th:text="${user?.role}"></p>
 
-<form th:action="@{/user/profile/{username}/edit(username=${user.username})}" method="get">
+<form th:action="@{/user/profile/{id}/edit(id=${user.id})}" method="get">
     <button type="submit"> Edit profile </button>
 </form>
 

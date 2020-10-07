@@ -67,26 +67,25 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("user/profile/{username}/edit")
-    public ModelAndView editProfile(@PathVariable("username") String username, Model model, ModelAndView modelAndView) {
-        User user = userService.findUserByUsername(username);
+    @GetMapping("user/profile/{id}/edit")
+    public ModelAndView editProfile(@PathVariable("id") Integer id, Model model) {
+        User user = userService.findById(id);
 
         model.addAttribute("user", user);
-        modelAndView.setViewName("user/edit");
 
-        return modelAndView;
+        return new ModelAndView("user/edit");
     }
 
-    @PostMapping("user/profile/{username}")
-    public ModelAndView editProfilePost(@PathVariable("username") String username,
-                                  @RequestParam("newPassword") String newPassword, Model model) {
-      User userToUpd = userService.findUserByUsername(username);
+    @PostMapping("user/edit/{id}")
+    public ModelAndView editProfilePost(@PathVariable("id") Integer id,
+                                        @RequestParam("newPassword") String newPassword, Model model) {
+      User userToUpd = userService.findById(id);
 
       userToUpd.setPassword(passwordEncoder.encode(newPassword));
       userService.update(userToUpd);
 
       model.addAttribute("user", userToUpd);
-      return new ModelAndView("user/profile");
+      return new ModelAndView("redirect:/user/profile/" + userToUpd.getUsername());
     }
 
 }

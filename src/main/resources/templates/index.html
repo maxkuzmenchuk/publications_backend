@@ -14,11 +14,17 @@ Home Page
 <div sec:authorize="isAuthenticated()">
 <a th:text="${#authentication.name}" th:href="@{user/profile/{username}(username=${#authentication.name})}"></a>
 <div th:text="${#authentication.authorities}"></div>
+    <form th:action="@{/logout}" method="post">
+        <div>
+            <button type="submit">Log Out </button>
+        </div>
+    </form>
 </div>
-<form th:action="@{/logout}" method="post">
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}"><button>Login</button></a>
+</div>
 <div>
-    <button type="submit">Log Out </button>
+    <a th:href="@{/show-all}"><button>Admin</button></a>
 </div>
-</form>
 </body>
 </html>

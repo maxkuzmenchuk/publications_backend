@@ -70,8 +70,15 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public boolean update(User user) {
-        userRepository.saveAndFlush(user);
-        return true;
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+    public User findById(Integer id) {
+        return userRepository.getOne(id);
     }
 }

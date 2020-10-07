@@ -7,7 +7,7 @@
 <body>
 EDIT PROFILE
 
-<form th:action="@{/user/profile/{username}(username=${user.username})}" method="post">
+<form th:action="@{/user/profile/{id}(id=${user.id})}" method="post">
 <!--/*@thymesVar id="user" type="com.kuzmenchuk.publications.repository.model.User"*/-->
 <input name="username" id="username" th:value="${user.username}"/>
 <input name="newPassword" id="newPassword" th:value="${user.password}"/>
