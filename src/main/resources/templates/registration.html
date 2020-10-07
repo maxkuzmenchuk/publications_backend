@@ -7,15 +7,18 @@
 <body>
 <h1>Registration Form</h1>
 
-<form name='login' th:action="@{/registration}" method='POST'>
+<!--/*@thymesVar id="newUser" type="com.kuzmenchuk.publications.repository.model.User"*/-->
+<form th:object="${newUser}" th:action="@{/registration}" method='POST'>
     <table>
         <tr>
             <td>Username:</td>
-            <td><input type='text' name='username' value=''></td>
+            <td><input id='username' name='username' th:field="*{username}" /></td>
+            <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+            <div th:if="${message}" th:text="${message}"></div>
         </tr>
         <tr>
             <td>Password:</td>
-            <td><input type='password' name='password' /></td>
+            <td><input id='password' name='password' th:field="*{password}"/></td>
         </tr>
         <tr>
             <td colspan='2'><input name="submit" type="submit" value="submit" /></td>

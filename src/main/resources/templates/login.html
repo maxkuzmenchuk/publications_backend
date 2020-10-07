@@ -4,7 +4,7 @@
 </head>
 <body>
 <div th:fragment="content">
-    <form name="f" th:action="@{/login}" method="post">
+    <form name="login" th:action="@{/login}" method="post">
         <fieldset>
             <legend>Please Login</legend>
             <div th:if="${param.error}" class="alert alert-error">
@@ -23,6 +23,7 @@
         </fieldset>
     </form>
 </div>
+<span>Dont have account? <a th:href="@{/registration}">Register here</a></span>
 </body>
 </html>
 

@@ -1,5 +1,6 @@
 package com.kuzmenchuk.publications.service;
 
+import com.kuzmenchuk.publications.exception.UserAlreadyExistException;
 import com.kuzmenchuk.publications.repository.UserRepository;
 import com.kuzmenchuk.publications.repository.model.Role;
 import com.kuzmenchuk.publications.repository.model.User;
@@ -48,18 +49,23 @@ public class UserService implements UserDetailsService {
         return new ArrayList<>(setAuths);
     }
 
-    public boolean save(User user) {
-        User existingUser = userRepository.findByUsername(user.getUsername());
+    @Transactional
+    public User registerNewUser(User user)  {
 
-        if (existingUser != null) return false;
+        if (usernameExists(user.getUsername())) {
+            throw new UserAlreadyExistException("User " + user.getUsername() + " is exists!");
+        }
 
-        user.setUsername(user.getUsername());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(new HashSet<>(Collections.singleton(Role.ROLE_USER)));
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(new HashSet<>(Collections.singleton(Role.ROLE_USER)));
 
-        userRepository.saveAndFlush(user);
+        return userRepository.saveAndFlush(newUser);
+    }
 
-        return true;
+    private boolean usernameExists(String username) {
+        return userRepository.findByUsername(username) != null;
     }
 
     public List<User> showAll() {

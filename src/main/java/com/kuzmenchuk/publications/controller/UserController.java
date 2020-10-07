@@ -1,5 +1,6 @@
 package com.kuzmenchuk.publications.controller;
 
+import com.kuzmenchuk.publications.exception.UserAlreadyExistException;
 import com.kuzmenchuk.publications.repository.model.User;
 import com.kuzmenchuk.publications.service.UserService;
 import org.apache.tomcat.websocket.AuthenticationException;
@@ -21,25 +22,27 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @GetMapping("/")
+    public String index() {
+        return "/";
+    }
     @GetMapping("/registration")
-    public ModelAndView regModel() {
-        ModelAndView model = new ModelAndView();
-
-        model.setViewName("registration");
-
-        return model;
+    public ModelAndView displayRegistration(Model model) {
+        model.addAttribute("newUser", new User());
+        return new ModelAndView("registration");
     }
 
     @PostMapping("/registration")
-    public String registration(@RequestParam("username") String username, @RequestParam("password") String password) {
-        User user = new User();
+    public ModelAndView registration(@ModelAttribute("newUser") User newUser,
+                                     Error errors) {
+       try {
+           User registered = userService.registerNewUser(newUser);
+       } catch (UserAlreadyExistException e) {
+           return new ModelAndView().addObject("message",
+                   "An account for that username already exists");
+       }
 
-        user.setUsername(username);
-        user.setPassword(password);
-
-        userService.save(user);
-
-        return "/index";
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/login?error")
