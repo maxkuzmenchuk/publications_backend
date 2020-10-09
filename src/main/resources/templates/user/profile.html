@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Publications</title>
+</head>
+<body>
+
+<!--/*@thymesVar id="user" type="com.kuzmenchuk.publications.repository.model.User"*/-->
+<p th:text="${user?.username}"></p>
+<p th:text="${user?.password}"></p>
+<p th:text="${user?.role}"></p>
+
+<form th:action="@{/user/profile/{id}/edit(id=${user.id})}" method="get">
+    <button type="submit"> Edit profile </button>
+</form>
+
+
+</body>
+</html>
