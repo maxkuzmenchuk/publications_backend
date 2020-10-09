@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private UserService userService;
@@ -24,8 +25,9 @@ public class AdminController {
 
         roles.add("ROLE_ADMIN");
         roles.add("ROLE_USER");
-        model.addAttribute("roles", roles);
 
+        model.addAttribute("updUser", new User());
+        model.addAttribute("roles", roles);
         model.addAttribute("users", userService.showAll());
 
         return new ModelAndView("admin");
@@ -49,7 +51,7 @@ public class AdminController {
 
         userService.update(userToUpd);
 
-        return new ModelAndView("redirect:/show-all");
+        return new ModelAndView("redirect:/admin/show-all");
     }
 
     @PostMapping("/delete/{id}")
@@ -59,6 +61,6 @@ public class AdminController {
 
         userService.delete(userToDelete);
 
-        return new ModelAndView("redirect:/show-all");
+        return new ModelAndView("redirect:/admin/show-all");
     }
 }

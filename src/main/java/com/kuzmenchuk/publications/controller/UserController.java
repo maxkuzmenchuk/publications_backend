@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
 public class UserController {
@@ -26,6 +28,7 @@ public class UserController {
     public String index() {
         return "/";
     }
+
     @GetMapping("/registration")
     public ModelAndView displayRegistration(Model model) {
         model.addAttribute("newUser", new User());
@@ -33,16 +36,20 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView registration(@ModelAttribute("newUser") User newUser,
-                                     Error errors) {
-       try {
-           User registered = userService.registerNewUser(newUser);
-       } catch (UserAlreadyExistException e) {
-           return new ModelAndView().addObject("message",
-                   "An account for that username already exists");
-       }
+    public ModelAndView registration(@ModelAttribute("newUser") @Valid User newUser,
+                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView();
+        } else {
+            try {
+                userService.registerNewUser(newUser);
+            } catch (UserAlreadyExistException e) {
+                return new ModelAndView().addObject("message",
+                        "An account for that username already exists");
+            }
 
-        return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/");
+        }
     }
 
     @GetMapping("/login?error")

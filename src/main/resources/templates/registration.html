@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -8,22 +8,25 @@
 <h1>Registration Form</h1>
 
 <!--/*@thymesVar id="newUser" type="com.kuzmenchuk.publications.repository.model.User"*/-->
-<form th:object="${newUser}" th:action="@{/registration}" method='POST'>
-    <table>
-        <tr>
-            <td>Username:</td>
-            <td><input id='username' name='username' th:field="*{username}" /></td>
-            <!--/*@thymesVar id="message" type="java.lang.String"*/-->
-            <div th:if="${message}" th:text="${message}"></div>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input id='password' name='password' th:field="*{password}"/></td>
-        </tr>
-        <tr>
-            <td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
+<form name="registration" th:object="${newUser}" th:action="@{/registration}" method='POST'>
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <div th:if="${message}" th:text="${message}"></div>
+    <div class="form-group" id="username_div">
+        <input type="text" name="username" th:field="*{username}" class="form-control"
+               id="username" placeholder="Name">
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+        </div>
+    </div>
+    </div>
+    <div class="form-group">
+        <input type="password" name="password" th:field="*{password}" class="form-control"
+               id="password" placeholder="Password" />
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+        </div>
+    </div>
+    <div class="col-md-6 mt-5">
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </div>
 </form>
 </body>
 </html>
