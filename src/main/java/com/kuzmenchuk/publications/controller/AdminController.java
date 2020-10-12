@@ -55,8 +55,7 @@ public class AdminController {
     }
 
     @PostMapping("/delete/{id}")
-    public ModelAndView deleteUserByAdmin(@PathVariable("id") Integer id,
-                                          @ModelAttribute("updUser") User updUser) {
+    public ModelAndView deleteUserByAdmin(@PathVariable("id") Integer id) {
         User userToDelete = userService.findById(id);
 
         userService.delete(userToDelete);
