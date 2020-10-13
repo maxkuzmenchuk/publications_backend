@@ -5,8 +5,13 @@ import com.kuzmenchuk.publications.repository.model.User;
 import com.kuzmenchuk.publications.service.UserService;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +29,9 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @GetMapping("/")
     public String index() {
         return "/";
@@ -37,7 +45,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public ModelAndView registration(@ModelAttribute("newUser") @Valid User newUser,
-                                     BindingResult bindingResult) {
+                                     BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView();
         } else {
@@ -47,6 +55,20 @@ public class UserController {
                 return new ModelAndView().addObject("message",
                         "An account for that username already exists");
             }
+
+
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(newUser.getUsername(),
+                    newUser.getPassword());
+
+            // generate session if one doesn't exist
+            request.getSession();
+
+            token.setDetails(new WebAuthenticationDetails(request));
+            Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+            SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+
 
             return new ModelAndView("redirect:/");
         }
