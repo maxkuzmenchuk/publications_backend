@@ -6,7 +6,7 @@
 </head>
 <body>
 <!--/*@thymesVar id="newPublication" type="com.kuzmenchuk.publications.repository.model.Publication"*/-->
-<form name="newPublication" th:object="${newPublication}" th:action="@{/admin/publication/new-publication}" method='post'>
+<form name="newPublication" th:object="${newPublication}" th:action="@{/admin/publication/new-publication}" enctype="multipart/form-data" method='post'>
     <div>
         <input type="text" name="name" th:field="*{name}"
                id="name" placeholder="Name">
@@ -26,8 +26,11 @@
         </div>
     </div>
     <div>
-        <input type="text" name="imageName" th:field="*{imageName}"
-               id="imageName" placeholder="imageName" />
+        <input type="file" name="file"
+               id="file" placeholder="file" />
+        <div th:if="${message}">
+            <span th:text="${message}"></span>
+        </div>
         </div>
     </div>
     <div>

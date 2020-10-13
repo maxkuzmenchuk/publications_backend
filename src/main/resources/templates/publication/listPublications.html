@@ -15,7 +15,7 @@
     <li th:text="${publication.id}">ID</li>
     <li>Image</li>
     <li th:text="${publication.name}">Name</li>
-    <li th:text="${publication.description}">Description</li>
+    <li><a th:href="@{/publication/show/{id}(id=${publication.id})}" th:text="${publication.description}">Description</a></li>
     <li th:text="${publication.price}">Price</li>
     <li><a th:href="@{/admin/publication/edit/{id}(id=${publication.id})}"><button type="button">EDIT</button></a>
         <form th:action="@{/admin/publication/delete/{id}(id=${publication.id})}" method="post"><button type="submit">DELETE</button></form></li>
