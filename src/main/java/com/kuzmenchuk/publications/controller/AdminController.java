@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -19,18 +20,23 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+//    @GetMapping("/show-all")
+//    public ModelAndView show(@ModelAttribute("updUser") User user, Model model) {
+//        ArrayList<String> roles = new ArrayList<>();
+//
+//        roles.add("ROLE_ADMIN");
+//        roles.add("ROLE_USER");
+//
+//        model.addAttribute("updUser", new User());
+//        model.addAttribute("roles", roles);
+//        model.addAttribute("users", userService.showAll());
+//
+//        return new ModelAndView("admin");
+//    }
+
     @GetMapping("/show-all")
-    public ModelAndView show(@ModelAttribute("updUser") User user, Model model) {
-        ArrayList<String> roles = new ArrayList<>();
-
-        roles.add("ROLE_ADMIN");
-        roles.add("ROLE_USER");
-
-        model.addAttribute("updUser", new User());
-        model.addAttribute("roles", roles);
-        model.addAttribute("users", userService.showAll());
-
-        return new ModelAndView("admin");
+    public List<User> showUsers() {
+        return userService.showAll();
     }
 
     @GetMapping("/show-user")

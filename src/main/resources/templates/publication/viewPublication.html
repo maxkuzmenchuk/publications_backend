@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" >
 <head>
-    <meta charset="UTF-8">
+    <meta content="text/html" charset="UTF-8">
     <title>Publication info - Publications</title>
 </head>
 <body>
-Publication info
+<div>
+    <label th:text="${publication.name}"></label>
+</div>
+<div>
+<!--    <img width="220px" height="220px"  th:src="@{/img/{image}(image=${publication.imageName})}" />-->
+    <img width="220px" height="220px"  th:src="@{/images/{image}(image=${publication.imageName})}" />
+</div>
+<div>
+    Price: <label th:text="${publication.price}"></label>
+</div>
+<div>
+    Description: <label th:text="${publication.description}"></label>
+</div>
 </body>
 </html>
