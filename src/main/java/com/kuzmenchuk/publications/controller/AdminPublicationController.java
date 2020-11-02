@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/admin/publication")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminPublicationController {
     @Autowired
     private PublicationService publicationService;
