@@ -18,18 +18,24 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public boolean saveOrder(User user, Double price, List<Integer> publicationsId) {
+    public void saveOrder(Order orderData) {
         Order order = new Order();
 
-        order.setUserId(user.getId());
-        order.setUsername(user.getUsername());
-        order.setPrice(price);
+        order.setUserId(orderData.getUserId());
+        order.setUsername(orderData.getUsername());
+        order.setPrice(orderData.getPrice());
         order.setDate(new Timestamp(new Date().getTime()));
         order.setStatus("WAITING");
-        order.setPublicationsId(new HashSet<>(publicationsId));
+        order.setPublicationsId(new HashSet<>(orderData.getPublicationsId()));
 
         orderRepository.saveAndFlush(order);
+    }
 
-        return true;
+    public Order showOrder(Integer id) {
+        return orderRepository.findOrderById(id);
+    }
+
+    public List<Order> showAllOrders() {
+        return orderRepository.findAll();
     }
 }
