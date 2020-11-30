@@ -33,17 +33,6 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/")
-    public String index() {
-        return "/";
-    }
-
-    @GetMapping("/registration")
-    public ModelAndView displayRegistration(Model model) {
-        model.addAttribute("newUser", new User());
-        return new ModelAndView("registration");
-    }
-
     @PostMapping("/registration")
     public ModelAndView registration(@ModelAttribute("newUser") @Valid User newUser,
                                      BindingResult bindingResult, HttpServletRequest request) {
@@ -75,6 +64,20 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login")
+    public void login(@RequestBody User user, BindingResult bindingResult, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(),
+                user.getPassword());
+
+        // generate session if one doesn't exist
+        request.getSession();
+
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+    }
+
     @GetMapping("/login?error")
     public String login(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
@@ -90,35 +93,23 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("user/profile/{username}")
-    public ModelAndView profile(@PathVariable("username") String username, Model model, ModelAndView modelAndView) {
-        User user = userService.findUserByUsername(username);
-
-        model.addAttribute("user", user);
-        modelAndView.setViewName("user/profile");
-
-        return modelAndView;
+    @GetMapping("profile/{id}")
+    public User profile(@PathVariable("id") Integer id) {
+        return userService.findById(id);
     }
 
-    @GetMapping("user/profile/{id}/edit")
-    public ModelAndView editProfile(@PathVariable("id") Integer id, Model model) {
-        User user = userService.findById(id);
-
-        model.addAttribute("user", user);
-
-        return new ModelAndView("user/edit");
+    @GetMapping("profile/{id}/edit")
+    public User editProfile(@PathVariable("id") Integer id) {
+        return userService.findById(id);
     }
 
-    @PostMapping("user/edit/{id}")
-    public ModelAndView editProfilePost(@PathVariable("id") Integer id,
-                                        @RequestParam("newPassword") String newPassword, Model model) {
+    @PostMapping("profile/edit/{id}")
+    public void editProfilePost(@PathVariable("id") Integer id,
+                                        @RequestParam("newPassword") String newPassword) {
       User userToUpd = userService.findById(id);
 
       userToUpd.setPassword(passwordEncoder.encode(newPassword));
       userService.update(userToUpd);
-
-      model.addAttribute("user", userToUpd);
-      return new ModelAndView("redirect:/user/profile/" + userToUpd.getUsername());
     }
 
 }

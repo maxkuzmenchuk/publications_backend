@@ -5,7 +5,6 @@ import com.kuzmenchuk.publications.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -24,14 +23,14 @@ public class AdminController {
         return userService.showAll();
     }
 
-    @GetMapping("/show-user")
-    public User showUser(@RequestParam("username") String username) {
-        return userService.findUserByUsername(username);
+    @GetMapping("/show-user/{id}")
+    public User showUser(@PathVariable("id") Integer id) {
+        return userService.findById(id);
     }
 
     @PostMapping("/update/{id}")
-    public ModelAndView updateUserByAdmin(@PathVariable("id") Integer id,
-                                          @ModelAttribute("updUser") User updUser) {
+    public void updateUserByAdmin(@PathVariable("id") Integer id,
+                                          @RequestBody User updUser) {
         User userToUpd = userService.findById(id);
 
         userToUpd.setUsername(updUser.getUsername());
@@ -41,16 +40,12 @@ public class AdminController {
         userToUpd.setRole((updUser.getRole()));
 
         userService.update(userToUpd);
-
-        return new ModelAndView("redirect:/admin/show-all");
     }
 
     @PostMapping("/delete/{id}")
-    public ModelAndView deleteUserByAdmin(@PathVariable("id") Integer id) {
+    public void deleteUserByAdmin(@PathVariable("id") Integer id) {
         User userToDelete = userService.findById(id);
 
         userService.delete(userToDelete);
-
-        return new ModelAndView("redirect:/admin/show-all");
     }
 }
