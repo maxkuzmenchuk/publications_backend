@@ -1,3 +1,9 @@
+CREATE DATABASE publications
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
 CREATE SCHEMA publications;
 
 CREATE SEQUENCE public.hibernate_sequence
@@ -9,7 +15,7 @@ CREATE SEQUENCE public.hibernate_sequence
 
 
 ALTER TABLE public.hibernate_sequence
-    OWNER TO mkuzmenchuk;
+    OWNER TO postgres;
 
 CREATE SEQUENCE publications.user_user_id_seq
     AS integer
@@ -21,7 +27,7 @@ CREATE SEQUENCE publications.user_user_id_seq
 
 
 ALTER TABLE publications.user_user_id_seq
-    OWNER TO mkuzmenchuk;
+    OWNER TO postgres;
 
 
 create table publications.user_account
@@ -34,7 +40,7 @@ create table publications.user_account
 );
 
 alter table publications.user_account
-    owner to mkuzmenchuk;
+    owner to postgres;
 
 create unique index user_account_id_uindex
     on publications.user_account (id);
@@ -51,7 +57,7 @@ create table publications.user_role
 );
 
 alter table publications.user_role
-    owner to mkuzmenchuk;
+    owner to postgres;
 
 create unique index user_role_id_uindex
     on publications.user_role (id);
