@@ -1,8 +1,11 @@
 package com.kuzmenchuk.publications.util;
 
+import com.kuzmenchuk.publications.repository.model.User;
+import com.kuzmenchuk.publications.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Autowired
+    private UserService userService;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -56,8 +62,14 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userDetails.getAuthorities());
-        return "Bearer " + doGenerateToken(claims, userDetails.getUsername());
+
+        User user = userService.findUserByUsername(userDetails.getUsername());
+        if (user != null) {
+            claims.put("id", user.getId());
+            claims.put("username", user.getUsername());
+            claims.put("role", userDetails.getAuthorities());
+        }
+        return doGenerateToken(claims, userDetails.getUsername());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
@@ -67,7 +79,7 @@ public class JwtTokenUtil implements Serializable {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
