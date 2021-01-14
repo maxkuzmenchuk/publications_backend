@@ -64,6 +64,30 @@ public class UserService implements UserDetailsService {
         return userRepository.saveAndFlush(newUser);
     }
 
+    public User addNewUser(User user) {
+        if (usernameExists(user.getUsername())) {
+            throw new UserAlreadyExistException("User " + user.getUsername() + " is exists!");
+        }
+
+        Set<Role> role = new HashSet<>();
+
+        switch (user.getRole().toString()) {
+            case "ROLE_ADMIN":
+                role.add(Role.ROLE_ADMIN);
+                break;
+            case "ROLE_USER":
+                role.add(Role.ROLE_USER);
+                break;
+        }
+
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRole(role);
+
+        return userRepository.saveAndFlush(newUser);
+    }
+
     private boolean usernameExists(String username) {
         return userRepository.findByUsername(username) != null;
     }

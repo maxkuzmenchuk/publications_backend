@@ -45,7 +45,6 @@ public class UserController {
     @PostMapping("/registration")
     public String registration(@RequestBody User newUser,
                                BindingResult bindingResult, HttpServletRequest request) {
-        System.out.println(newUser);
         try {
             userService.registerNewUser(newUser);
         } catch (UserAlreadyExistException e) {
