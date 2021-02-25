@@ -31,21 +31,21 @@ public class AdminController {
         return userService.findById(id);
     }
 
-    @PostMapping("/update/{id}")
-    public void updateUserByAdmin(@PathVariable("id") Integer id,
-                                          @RequestBody User updUser) {
-        System.err.println(updUser);
-
-        User userToUpd = userService.findById(id);
-
-        userToUpd.setUsername(updUser.getUsername());
-        if (!updUser.getPassword().equalsIgnoreCase(userToUpd.getPassword())) {
-            userToUpd.setPassword(passwordEncoder.encode(updUser.getPassword()));
-        }
-        userToUpd.setRole((updUser.getRole()));
-
-        userService.update(userToUpd);
-    }
+//    @PostMapping("/update/{id}")
+//    public void updateUserByAdmin(@PathVariable("id") Integer id,
+//                                          @RequestBody User updUser) {
+//        System.err.println(updUser);
+//
+//        User userToUpd = userService.findById(id);
+//
+//        userToUpd.setUsername(updUser.getUsername());
+//        if (!updUser.getPassword().equalsIgnoreCase(userToUpd.getPassword())) {
+//            userToUpd.setPassword(passwordEncoder.encode(updUser.getPassword()));
+//        }
+//        userToUpd.setRole((updUser.getRole()));
+//
+//        userService.update(userToUpd);
+//    }
 
     @PostMapping("/delete/{id}")
     public void deleteUserByAdmin(@PathVariable("id") Integer id) {
@@ -61,7 +61,7 @@ public class AdminController {
                                BindingResult bindingResult, HttpServletRequest request) {
         System.err.println("user = " + newUser);
         try {
-            userService.addNewUser(newUser);
+//            userService.addNewUser(newUser);
         } catch (UserAlreadyExistException e) {
             throw new UserAlreadyExistException("An account for that username already exists");
         }

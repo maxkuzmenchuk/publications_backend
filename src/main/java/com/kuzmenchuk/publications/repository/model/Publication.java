@@ -16,16 +16,20 @@ import javax.validation.constraints.NotEmpty;
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @Column(name = "publication_id")
+    private Long id;
+
     @NotEmpty(message = "Name cannot be empty")
-    @Column(name = "name")
+    @Column(name = "publ_name")
     private String name;
+
     @Min(value = 0, message = "Price could be equal or more than 0")
     @Column(name = "price")
-    private int price;
+    private double price;
+
     @Column(name = "image_name")
     private String imageName;
+
     @Column(name = "description")
     private String description;
 }

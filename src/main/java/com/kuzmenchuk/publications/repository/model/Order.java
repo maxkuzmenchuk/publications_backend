@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +15,8 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
-
-    @Column(name = "user_id")
-    private int userId;
-
-    @Column(name = "username")
-    private String username;
+    @Column(name = "order_id")
+    private Long id;
 
     @Column(name = "amount")
     private int amount;
@@ -39,7 +31,11 @@ public class Order {
     private double price;
 
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(schema = "publications", name = "order_details", joinColumns = @JoinColumn(name = "order_id"))
-    private Set<Integer> publicationsId = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "o_publication_id")
+    private Publication publication;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "o_user_id")
+    private User user;
 }

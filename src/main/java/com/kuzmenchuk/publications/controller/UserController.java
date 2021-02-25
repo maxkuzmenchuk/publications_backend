@@ -46,7 +46,7 @@ public class UserController {
     public String registration(@RequestBody User newUser,
                                BindingResult bindingResult, HttpServletRequest request) {
         try {
-            userService.registerNewUser(newUser);
+//            userService.registerNewUser(newUser);
         } catch (UserAlreadyExistException e) {
             throw new UserAlreadyExistException("An account for that username already exists");
         }
