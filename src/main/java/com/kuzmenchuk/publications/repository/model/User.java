@@ -16,7 +16,7 @@ import java.util.Set;
 @Table(schema = "publications", name = "user_account")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotEmpty(message = "Username cannot be empty")
     @Pattern(regexp = "[A-Za-z0-9]\\w+", message = "Incorrect username")

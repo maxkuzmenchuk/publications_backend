@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(schema = "publications", name = "publications")
 public class Publication {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @NotEmpty(message = "Name cannot be empty")
