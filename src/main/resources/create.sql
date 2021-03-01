@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS publications.user_account(user_id serial NOT NULL PRI
 -- Table: authorities
 
 -- DROP TABLE IF EXISTS publications.authorities;
-CREATE TABLE IF NOT EXISTS publications.authorities(authority_id serial NOT NULL PRIMARY KEY, user_id INTEGER, authority VARCHAR NOT NULL, CONSTRAINT fk_authorities_users FOREIGN KEY(user_id) references publications.user_account(user_id));
+CREATE TABLE IF NOT EXISTS publications.authorities(authority_id serial NOT NULL PRIMARY KEY, a_user_id INTEGER, authority VARCHAR NOT NULL, CONSTRAINT fk_authorities_users FOREIGN KEY(a_user_id) REFERENCES publications.user_account(user_id));
 
 
 -- Table: publications
@@ -28,5 +28,5 @@ CREATE TABLE IF NOT EXISTS publications.publications(publication_id serial NOT N
 CREATE TABLE IF NOT EXISTS publications.orders(order_id serial NOT NULL PRIMARY KEY, amount INTEGER, date TIMESTAMP WITHOUT TIME ZONE, price DOUBLE PRECISION, status VARCHAR(255), o_publication_id INTEGER NOT NULL, o_user_id INTEGER NOT NULL);
 ALTER TABLE publications.orders DROP CONSTRAINT fk_orders_publications;
 ALTER TABLE publications.orders DROP CONSTRAINT fk_orders_user_account;
-ALTER TABLE publications.orders ADD CONSTRAINT fk_orders_publications FOREIGN KEY(o_publication_id) references publications.publications(publication_id);
-ALTER TABLE publications.orders ADD CONSTRAINT fk_orders_user_account FOREIGN KEY(o_user_id) references publications.user_account(user_id);
+ALTER TABLE publications.orders ADD CONSTRAINT fk_orders_publications FOREIGN KEY(o_publication_id) REFERENCES publications.publications(publication_id);
+ALTER TABLE publications.orders ADD CONSTRAINT fk_orders_user_account FOREIGN KEY(o_user_id) REFERENCES publications.user_account(user_id);

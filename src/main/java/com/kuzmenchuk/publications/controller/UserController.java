@@ -3,9 +3,9 @@ package com.kuzmenchuk.publications.controller;
 import com.kuzmenchuk.publications.exception.UserAlreadyExistException;
 import com.kuzmenchuk.publications.repository.model.User;
 import com.kuzmenchuk.publications.service.UserService;
-import com.kuzmenchuk.publications.util.JwtRequest;
-import com.kuzmenchuk.publications.util.JwtResponse;
-import com.kuzmenchuk.publications.util.JwtTokenUtil;
+import com.kuzmenchuk.publications.util.jwt.JwtRequest;
+import com.kuzmenchuk.publications.util.jwt.JwtResponse;
+import com.kuzmenchuk.publications.util.jwt.JwtTokenUtil;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class UserController {
     public String registration(@RequestBody User newUser,
                                BindingResult bindingResult, HttpServletRequest request) {
         try {
-//            userService.registerNewUser(newUser);
+            userService.registerNewUser(newUser);
         } catch (UserAlreadyExistException e) {
             throw new UserAlreadyExistException("An account for that username already exists");
         }
@@ -108,22 +108,20 @@ public class UserController {
     }
 
     @GetMapping("profile/{id}")
-    public User profile(@PathVariable("id") Integer id) {
-        return userService.findById(id);
+    public User profile(@PathVariable("id") Long id) {
+        return userService.findById(id).orElse(null);
     }
 
     @GetMapping("profile/{id}/edit")
-    public User editProfile(@PathVariable("id") Integer id) {
-        return userService.findById(id);
+    public User editProfile(@PathVariable("id") Long id) {
+        return userService.findById(id).orElse(null);
     }
 
-    @PostMapping("profile/edit/{id}")
-    public void editProfilePost(@PathVariable("id") Integer id,
-                                @RequestParam("newPassword") String newPassword) {
-        User userToUpd = userService.findById(id);
+    @PostMapping("profile/edit")
+    public void editProfilePost(@RequestBody User user) {
+        User userToUpd = userService.findById(user.getId()).orElse(null);
 
-        userToUpd.setPassword(passwordEncoder.encode(newPassword));
-        userService.update(userToUpd);
+        userService.save(userToUpd);
     }
 
 }

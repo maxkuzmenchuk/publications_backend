@@ -1,5 +1,6 @@
 package com.kuzmenchuk.publications.repository.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,8 +33,9 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "a_user_id", referencedColumnName = "user_id")
     private List<Authority> authorities;
 
     @Override

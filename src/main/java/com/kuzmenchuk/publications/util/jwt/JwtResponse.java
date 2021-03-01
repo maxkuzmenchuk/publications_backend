@@ -1,4 +1,4 @@
-package com.kuzmenchuk.publications.util;
+package com.kuzmenchuk.publications.util.jwt;
 
 import java.io.Serializable;
 

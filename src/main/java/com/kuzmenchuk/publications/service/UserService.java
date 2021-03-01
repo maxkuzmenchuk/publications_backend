@@ -1,6 +1,8 @@
 package com.kuzmenchuk.publications.service;
 
+import com.kuzmenchuk.publications.exception.UserAlreadyExistException;
 import com.kuzmenchuk.publications.repository.UserRepository;
+import com.kuzmenchuk.publications.repository.model.Authority;
 import com.kuzmenchuk.publications.repository.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,62 +34,26 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-//    private List<GrantedAuthority> buildUserAuthority(Set<Role> userRoles) {
-//
-//        Set<GrantedAuthority> setAuths = new HashSet<>();
-//
-//        // Build user's authorities
-//        for (Role userRole : userRoles) {
-//            setAuths.add(new SimpleGrantedAuthority(String.valueOf(userRole)));
-//        }
-//
-//        return new ArrayList<>(setAuths);
-//
-//        ApplicationUser applicationUser = applicationUserRepository.findByUsername(username);
-//        if (applicationUser == null) {
-//            throw new UsernameNotFoundException("User name not found: " + username);
-//        }
-//        return applicationUser;
-//    }
+    @Transactional
+    public void registerNewUser(User user)  {
 
-//    @Transactional
-//    public User registerNewUser(User user)  {
-//
-//        if (usernameExists(user.getUsername())) {
-//            throw new UserAlreadyExistException("User " + user.getUsername() + " is exists!");
-//        }
-//
-//        User newUser = new User();
-//        newUser.setUsername(user.getUsername());
-//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-//        newUser.setRole(new HashSet<>(Collections.singleton(Role.ROLE_USER)));
-//
-//        return userRepository.saveAndFlush(newUser);
-//    }
-//
-//    public User addNewUser(User user) {
-//        if (usernameExists(user.getUsername())) {
-//            throw new UserAlreadyExistException("User " + user.getUsername() + " is exists!");
-//        }
-//
-//        Set<Role> role = new HashSet<>();
-//
-//        switch (user.getRole().toString()) {
-//            case "ROLE_ADMIN":
-//                role.add(Role.ROLE_ADMIN);
-//                break;
-//            case "ROLE_USER":
-//                role.add(Role.ROLE_USER);
-//                break;
-//        }
-//
-//        User newUser = new User();
-//        newUser.setUsername(user.getUsername());
-//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-//        newUser.setRole(role);
-//
-//        return userRepository.saveAndFlush(newUser);
-//    }
+        if (usernameExists(user.getUsername())) {
+            throw new UserAlreadyExistException("User " + user.getUsername() + " is exists!");
+        }
+
+        Authority authority = new Authority();
+        List<Authority> authorities = new ArrayList<>();
+        authority.setAuthority("ROLE_USER");
+        authorities.add(authority);
+
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setAuthorities(authorities);
+        newUser.setEnabled(true);
+
+        userRepository.saveAndFlush(newUser);
+    }
 
     private boolean usernameExists(String username) {
         return userRepository.findByUsername(username) != null;
@@ -99,15 +67,15 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public void update(User user) {
-        userRepository.save(user);
+    public void save(User user) {
+        userRepository.saveAndFlush(user);
     }
 
     public void delete(User user) {
         userRepository.delete(user);
     }
 
-    public User findById(Integer id) {
-        return userRepository.getOne(id);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 }

@@ -1,8 +1,8 @@
 package com.kuzmenchuk.publications.config;
 
 import com.kuzmenchuk.publications.service.UserService;
-import com.kuzmenchuk.publications.util.JwtAuthenticationEntryPoint;
-import com.kuzmenchuk.publications.util.JwtRequestFilter;
+import com.kuzmenchuk.publications.util.jwt.JwtAuthenticationEntryPoint;
+import com.kuzmenchuk.publications.util.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

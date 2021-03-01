@@ -1,4 +1,4 @@
-package com.kuzmenchuk.publications.util;
+package com.kuzmenchuk.publications.util.jwt;
 
 import com.kuzmenchuk.publications.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
