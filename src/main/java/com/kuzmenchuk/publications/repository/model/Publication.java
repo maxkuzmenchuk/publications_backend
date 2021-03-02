@@ -30,6 +30,10 @@ public class Publication {
     @Column(name = "image_name")
     private String imageName;
 
+    @Lob
+    @Column(name = "cover")
+    private byte[] cover;
+
     @Column(name = "description")
     private String description;
 }

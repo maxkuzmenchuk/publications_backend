@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS publications.authorities(authority_id serial NOT NULL
 -- Table: publications
 
 -- DROP TABLE  IF EXISTS publications.publications;
-CREATE TABLE IF NOT EXISTS publications.publications(publication_id serial NOT NULL PRIMARY KEY, publ_name VARCHAR NOT NULL, price DOUBLE PRECISION, image_name VARCHAR(255), description VARCHAR(255), CONSTRAINT publications_price_check CHECK (price >= 0));
+CREATE TABLE IF NOT EXISTS publications.publications(publication_id serial NOT NULL PRIMARY KEY, publ_name VARCHAR NOT NULL, price DOUBLE PRECISION, image_name VARCHAR(255), cover OID, description VARCHAR(255), CONSTRAINT publications_price_check CHECK (price >= 0));
 
 -- Table: orders
 
