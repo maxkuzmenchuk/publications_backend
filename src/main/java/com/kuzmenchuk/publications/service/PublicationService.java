@@ -48,11 +48,7 @@ public class PublicationService {
         }
     }
 
-    public void update(Publication p) {
-        publicationRepository.saveAndFlush(p);
-    }
-
-    public void delete(Publication p) {
-        publicationRepository.delete(p);
+    public void delete(Long id) {
+        publicationRepository.deleteById(id);
     }
 }

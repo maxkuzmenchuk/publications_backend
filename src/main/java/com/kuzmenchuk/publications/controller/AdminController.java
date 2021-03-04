@@ -1,10 +1,13 @@
 package com.kuzmenchuk.publications.controller;
 
+import com.kuzmenchuk.publications.repository.model.Publication;
 import com.kuzmenchuk.publications.repository.model.User;
+import com.kuzmenchuk.publications.service.PublicationService;
 import com.kuzmenchuk.publications.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,6 +17,9 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PublicationService publicationService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -29,7 +35,7 @@ public class AdminController {
     }
 
     @PostMapping("/users/save")
-    public void saveUser(@RequestBody User user) {
+    public String saveUser(@RequestBody User user) {
         if (user.getId() != null ) {
             User userFromDB = userService.findById(user.getId()).orElse(new User());
 
@@ -44,11 +50,27 @@ public class AdminController {
         }
 
         userService.save(user);
+
+        return "Saved!";
     }
 
     @PostMapping("/users/delete/{id}")
     public void deleteUserByAdmin(@PathVariable("id") Long id) {
         User userToDelete = userService.findById(id).orElse(null);
         userService.delete(userToDelete);
+    }
+
+    @PostMapping("/publication/save")
+    public String savePublication(@ModelAttribute Publication publication, @RequestParam("image") MultipartFile cover) {
+        publicationService.savePublication(publication, cover);
+
+        return "Saved!";
+    }
+
+    @PostMapping("/publication/delete/{id}")
+    public String deletePublication(@PathVariable("id") Long id) {
+        publicationService.delete(id);
+
+        return "Deleted!";
     }
 }
